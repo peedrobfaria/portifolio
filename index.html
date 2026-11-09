@@ -225,9 +225,9 @@ html{overflow-x:hidden;-webkit-text-size-adjust:100%}
 <section id="trabalhos"><div class="wrap">
   <h2 class="rv">Meus <em>trabalhos</em></h2>
   <div class="grid">
-    <div class="card glass rv wide" data-embed="https://www.youtube.com/embed/L7NjS96ffbA?autoplay=1&amp;rel=0" role="button" tabindex="0" aria-label="Reproduzir vídeo YouTube/Vlog"><div class="art"></div><div class="play"></div><h3>YouTube/Vlog</h3><small>Cortes · Vlogs · Podcasts</small></div>
+    <div class="card glass rv wide" data-embed="https://www.youtube.com/embed/L7NjS96ffbA?autoplay=1&amp;rel=0&amp;playsinline=1" role="button" tabindex="0" aria-label="Reproduzir vídeo YouTube/Vlog"><div class="art"></div><div class="play"></div><h3>YouTube/Vlog</h3><small>Cortes · Vlogs · Podcasts</small></div>
     <div class="card glass rv tall" data-embed="https://www.instagram.com/reel/DcmTR73S2j7/embed" role="button" tabindex="0" aria-label="Reproduzir Reels Vertical"><div class="art"></div><div class="play"></div><h3>Vertical</h3><small>Reels · TikTok · Shorts</small></div>
-    <div class="card glass rv tall" data-embed="https://www.tiktok.com/embed/v2/7624686660474686737" role="button" tabindex="0" aria-label="Reproduzir Edit"><div class="art"></div><div class="play"></div><h3>Edits</h3><small>Ritmo · Impacto · Transições</small></div>
+    <div class="card glass rv tall" data-embed="https://www.tiktok.com/player/v1/7624686660474686737?description=1&amp;music_info=1" role="button" tabindex="0" aria-label="Reproduzir Edit"><div class="art"></div><div class="play"></div><h3>Edits</h3><small>Ritmo · Impacto · Transições</small></div>
   </div>
 </div></section>
 
@@ -287,7 +287,7 @@ html{overflow-x:hidden;-webkit-text-size-adjust:100%}
 (function(){
   var c=document.getElementById('cur');
   addEventListener('pointermove',function(e){c.style.left=e.clientX+'px';c.style.top=e.clientY+'px'});
-  function play(c){if(c.classList.contains('on'))return;var f=document.createElement('iframe');f.src=c.dataset.embed;f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';f.allowFullscreen=true;f.title=c.getAttribute('aria-label')||'Vídeo';c.classList.add('on');c.removeAttribute('role');c.removeAttribute('tabindex');c.innerHTML='';c.appendChild(f)}
+  function play(c){if(c.classList.contains('on'))return;var f=document.createElement('iframe');f.src=c.dataset.embed;f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';f.allowFullscreen=true;f.referrerPolicy='strict-origin-when-cross-origin';f.title=c.getAttribute('aria-label')||'Vídeo';c.classList.add('on');c.removeAttribute('role');c.removeAttribute('tabindex');c.innerHTML='';c.appendChild(f)}
   document.querySelectorAll('[data-embed]').forEach(function(c){c.addEventListener('click',function(){play(c)});c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();play(c)}})});
   var els=document.querySelectorAll('.rv');
   if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
