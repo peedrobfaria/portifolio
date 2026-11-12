@@ -137,6 +137,20 @@ html{overflow-x:hidden;-webkit-text-size-adjust:100%}
 @media(hover:none){.card:hover,.client:hover,.btn:hover,.contact a.big:hover{transform:none}.card:hover .play{transform:none}}
 @media(pointer:coarse){.cursor{display:none}}
 
+/* carrossel */
+.carousel{grid-column:1/-1;position:relative;min-width:0}
+.carousel .track{display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;position:relative;border-radius:28px;overscroll-behavior-x:contain}
+.carousel .track::-webkit-scrollbar{display:none}
+.carousel .card{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always}
+.carousel .card:hover{transform:none}
+.cbtn{position:absolute;top:calc((100% - 28px)/2 - 22px);z-index:5;width:44px;height:44px;padding:0 0 4px;border-radius:50%;display:grid;place-items:center;font-size:1.8rem;line-height:1;border:1px solid var(--gb);color:#fff;background:rgba(20,8,0,.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4);cursor:pointer;transition:opacity .2s,transform .2s}
+.cbtn:hover{transform:scale(1.1)}
+.cbtn:disabled{opacity:0;pointer-events:none}
+.cbtn.prev{left:12px}.cbtn.next{right:12px}
+.dots{display:flex;justify-content:center;gap:10px;margin-top:16px}
+.dots button{width:12px;height:12px;padding:0;border-radius:99px;border:1px solid var(--gb);background:var(--g1);cursor:pointer;transition:width .3s,background .3s}
+.dots button.act{width:34px;background:linear-gradient(90deg,var(--orange),var(--yellow));border-color:transparent}
+
 /* ===== mobile ===== */
 @media(max-width:700px){
   .blob{filter:blur(48px)}
@@ -188,6 +202,7 @@ html{overflow-x:hidden;-webkit-text-size-adjust:100%}
   footer{padding:22px 16px calc(40px + env(safe-area-inset-bottom,0px))}
 }
 @media(max-width:380px){.hero h1{font-size:34vw}.pill{font-size:.8rem;padding:7px 13px}}
+@media(max-width:700px){.carousel .track{border-radius:24px}.cbtn{width:38px;height:38px;font-size:1.5rem;top:calc((100% - 28px)/2 - 19px)}.cbtn.prev{left:8px}.cbtn.next{right:8px}}
 </style>
 </head>
 <body>
@@ -225,7 +240,7 @@ html{overflow-x:hidden;-webkit-text-size-adjust:100%}
 <section id="trabalhos"><div class="wrap">
   <h2 class="rv">Meus <em>trabalhos</em></h2>
   <div class="grid">
-    <div class="card glass rv wide" data-embed="https://www.youtube.com/embed/L7NjS96ffbA?autoplay=1&amp;rel=0&amp;playsinline=1" role="button" tabindex="0" aria-label="Reproduzir vídeo YouTube/Vlog"><div class="art"></div><div class="play"></div><h3>YouTube/Vlog</h3><small>Cortes · Vlogs · Podcasts</small></div>
+    <div class="carousel rv"><div class="track"><div class="card glass wide" data-embed="https://www.youtube.com/embed/L7NjS96ffbA?autoplay=1&amp;rel=0&amp;playsinline=1" role="button" tabindex="0" aria-label="Reproduzir vídeo 1 de YouTube/Vlog"><div class="art"></div><div class="play"></div><h3>YouTube/Vlog</h3></div><div class="card glass wide" data-embed="https://www.youtube.com/embed/p_DUMnvra5U?autoplay=1&amp;rel=0&amp;playsinline=1" role="button" tabindex="0" aria-label="Reproduzir vídeo 2 de YouTube/Vlog"><div class="art"></div><div class="play"></div><h3>YouTube/Vlog</h3></div></div><button type="button" class="cbtn prev" aria-label="Vídeo anterior">‹</button><button type="button" class="cbtn next" aria-label="Próximo vídeo">›</button><div class="dots"></div></div>
     <div class="card glass rv tall" data-embed="https://www.instagram.com/reel/DcmTR73S2j7/embed" role="button" tabindex="0" aria-label="Reproduzir Reels Vertical"><div class="art"></div><div class="play"></div><h3>Vertical</h3><small>Reels · TikTok · Shorts</small></div>
     <div class="card glass rv tall" data-embed="https://www.tiktok.com/player/v1/7624686660474686737?description=1&amp;music_info=1" role="button" tabindex="0" aria-label="Reproduzir Edit"><div class="art"></div><div class="play"></div><h3>Edits</h3><small>Ritmo · Impacto · Transições</small></div>
   </div>
@@ -287,8 +302,17 @@ html{overflow-x:hidden;-webkit-text-size-adjust:100%}
 (function(){
   var c=document.getElementById('cur');
   addEventListener('pointermove',function(e){c.style.left=e.clientX+'px';c.style.top=e.clientY+'px'});
-  function play(c){if(c.classList.contains('on'))return;var f=document.createElement('iframe');f.src=c.dataset.embed;f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';f.allowFullscreen=true;f.referrerPolicy='strict-origin-when-cross-origin';f.title=c.getAttribute('aria-label')||'Vídeo';c.classList.add('on');c.removeAttribute('role');c.removeAttribute('tabindex');c.innerHTML='';c.appendChild(f)}
+  function play(c){if(c.classList.contains('on'))return;var f=document.createElement('iframe');f.src=c.dataset.embed;f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';f.allowFullscreen=true;f.referrerPolicy='strict-origin-when-cross-origin';f.title=c.getAttribute('aria-label')||'Vídeo';c._orig=c.innerHTML;c.classList.add('on');c.removeAttribute('role');c.removeAttribute('tabindex');c.innerHTML='';c.appendChild(f)}
   document.querySelectorAll('[data-embed]').forEach(function(c){c.addEventListener('click',function(){play(c)});c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();play(c)}})});
+  (function(){var car=document.querySelector('.carousel');if(!car)return;var tr=car.querySelector('.track'),sl=[].slice.call(tr.children),dots=car.querySelector('.dots'),pv=car.querySelector('.prev'),nx=car.querySelector('.next'),cur=-1,raf=0;
+  var reset=function(c){if(!c._orig)return;c.innerHTML=c._orig;c._orig=null;c.classList.remove('on');c.setAttribute('role','button');c.setAttribute('tabindex','0')};
+  var go=function(i){tr.scrollTo({left:sl[Math.max(0,Math.min(sl.length-1,i))].offsetLeft,behavior:'smooth'})};
+  sl.forEach(function(s,i){var d=document.createElement('button');d.type='button';d.setAttribute('aria-label','Ir para o vídeo '+(i+1));d.addEventListener('click',function(){go(i)});dots.appendChild(d)});
+  var upd=function(){var best=0,m=1e9;sl.forEach(function(s,k){var x=Math.abs(s.offsetLeft-tr.scrollLeft);if(x<m){m=x;best=k}});if(best!==cur){cur=best;sl.forEach(function(s,k){if(k!==cur)reset(s)})}[].forEach.call(dots.children,function(d,k){d.classList.toggle('act',k===cur)});pv.disabled=cur===0;nx.disabled=cur===sl.length-1};
+  pv.addEventListener('click',function(){go(cur-1)});nx.addEventListener('click',function(){go(cur+1)});
+  tr.addEventListener('scroll',function(){cancelAnimationFrame(raf);raf=requestAnimationFrame(upd)},{passive:true});
+  addEventListener('resize',upd);upd();
+  })();
   var els=document.querySelectorAll('.rv');
   if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
   var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
